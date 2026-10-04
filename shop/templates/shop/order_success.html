@@ -1,0 +1,13 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Заказ оформлен{% endblock %}
+
+{% block content %}
+<section class="section success-box">
+    <h1>Спасибо за заказ!</h1>
+    <p>Ваш заказ №{{ order.id }} успешно оформлен.</p>
+    <p>Мы свяжемся с вами по телефону {{ order.phone }} в ближайшее время.</p>
+    <p>Сумма заказа: <strong>{{ order.total }} ₽</strong></p>
+    <a class="btn btn-primary" href="{% url 'catalog' %}">Продолжить покупки</a>
+</section>
+{% endblock %}

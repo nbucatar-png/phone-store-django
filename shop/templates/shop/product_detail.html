@@ -1,0 +1,32 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ product.brand }} {{ product.name }}{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+    <div class="product-image-wrap">
+        <img src="{{ product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ product.name }}">
+    </div>
+
+    <div class="product-info">
+        <span class="category-tag">{{ product.get_category_display }}</span>
+        <h1>{{ product.brand }} {{ product.name }}</h1>
+        <p class="price">{{ product.price }} ₽</p>
+        <p>{{ product.description }}</p>
+
+        <div class="product-meta">
+            <span>На складе: {{ product.stock }}</span>
+            <span>Бренд: {{ product.brand }}</span>
+        </div>
+
+        <form method="post" action="{% url 'add_to_cart' product.pk %}">
+            {% csrf_token %}
+            <label for="quantity">Количество</label>
+            <div class="qty-row">
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
+                <button type="submit" class="btn btn-primary">В корзину</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
