@@ -1,73 +1,30 @@
 # PhoneStore
 
-Мобильный интернет-магазин телефонов и аксессуаров на Django.
+A responsive Django storefront for phones and accessories.
 
-## Что есть в проекте
+## Features
 
-- главная страница с подборкой популярных товаров;
-- каталог телефонов и аксессуаров;
-- карточка товара;
-- корзина товаров;
-- форма оформления заказа;
-- адаптивный дизайн под мобильные устройства;
-- административная панель Django;
-- базовый набор товаров для старта.
+- English user interface and Django admin labels
+- Featured products homepage
+- Searchable, filterable catalog
+- Product detail pages with stock-aware cart limits
+- Editable cart quantities and item removal
+- Checkout form and order confirmation
+- Responsive layout for mobile and desktop
 
-## Быстрый старт
-
-1. Установите зависимости:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Выполните миграции:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-3. Заполните каталог тестовыми товарами:
-
-   ```bash
-   python manage.py seed_products
-   ```
-
-4. Запустите сервер:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-5. Откройте:
-
-   ```text
-   http://127.0.0.1:8000/
-   ```
-
-## Админ-панель
-
-После запуска проекта можно зайти в админку:
-
-```text
-http://127.0.0.1:8000/admin/
-```
-
-Логин и пароль создаются командой:
+## Quick start
 
 ```bash
-python manage.py createsuperuser
-```
-
-## Команда для наполнения каталога
-
-```bash
+pip install -r requirements.txt
+python manage.py migrate
 python manage.py seed_products
+python manage.py runserver
 ```
 
-## Структура проекта
+Open `http://127.0.0.1:8000/` in your browser. Create an admin account with `python manage.py createsuperuser`, then visit `/admin/`.
 
-- `phone_store/` — основной Django-проект
-- `shop/` — приложение магазина
-- `templates/` — шаблоны страниц
-- `static/` — стили и статические файлы
+## Project structure
+
+- `phone_store/` — Django project settings and URLs
+- `shop/` — catalog, cart, checkout, models, views, and templates
+- `static/` — CSS and frontend assets

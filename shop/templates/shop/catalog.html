@@ -1,33 +1,35 @@
 {% extends 'shop/base.html' %}
 
-{% block title %}Каталог товаров{% endblock %}
+{% block title %}Shop all products{% endblock %}
 
 {% block content %}
 <section class="section">
-    <div class="section-head">
-        <h2>Каталог</h2>
-        <div class="filter-row">
-            <a href="{% url 'catalog' %}?category=" class="filter-pill {% if not selected_category %}active{% endif %}">Все</a>
-            <a href="{% url 'catalog' %}?category=phone" class="filter-pill {% if selected_category == 'phone' %}active{% endif %}">Телефоны</a>
-            <a href="{% url 'catalog' %}?category=accessory" class="filter-pill {% if selected_category == 'accessory' %}active{% endif %}">Аксессуары</a>
-        </div>
+    <div class="section-head catalog-head">
+        <div><span class="eyebrow">Find your next upgrade</span><h1>Shop the collection</h1></div>
+        <form class="search-form" method="get" role="search">
+            <input type="search" name="q" value="{{ search_query }}" placeholder="Search products..." aria-label="Search products">
+            {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+            <button class="btn btn-primary small" type="submit">Search</button>
+        </form>
     </div>
-
+    <div class="filter-row" aria-label="Product categories">
+        <a href="{% url 'catalog' %}{% if search_query %}?q={{ search_query|urlencode }}{% endif %}" class="filter-pill {% if not selected_category %}active{% endif %}">All</a>
+        <a href="{% url 'catalog' %}?category=phone{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="filter-pill {% if selected_category == 'phone' %}active{% endif %}">Phones</a>
+        <a href="{% url 'catalog' %}?category=accessory{% if search_query %}&q={{ search_query|urlencode }}{% endif %}" class="filter-pill {% if selected_category == 'accessory' %}active{% endif %}">Accessories</a>
+    </div>
     <div class="product-grid">
         {% for product in products %}
             <article class="product-card">
-                <a href="{% url 'product_detail' product.pk %}">
-                    <img src="{{ product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ product.name }}">
-                </a>
+                <a href="{% url 'product_detail' product.pk %}" class="product-image-link"><img src="{{ product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ product.brand }} {{ product.name }}"></a>
                 <div class="product-body">
                     <span class="category-tag">{{ product.get_category_display }}</span>
                     <h3>{{ product.brand }} {{ product.name }}</h3>
-                    <p>{{ product.price }} ₽</p>
-                    <a class="btn btn-primary small" href="{% url 'product_detail' product.pk %}">Подробнее</a>
+                    <p class="price-line">{{ product.price|floatformat:2 }} <span>USD</span></p>
+                    <a class="btn btn-primary small" href="{% url 'product_detail' product.pk %}">View details</a>
                 </div>
             </article>
         {% empty %}
-            <p>Товаров нет.</p>
+            <div class="empty-box"><h3>No products found</h3><p>Try a different search or category.</p><a class="btn btn-secondary-dark" href="{% url 'catalog' %}">Clear filters</a></div>
         {% endfor %}
     </div>
 </section>

@@ -1,43 +1,44 @@
 {% extends 'shop/base.html' %}
 
-{% block title %}PhoneStore — Телефоны и аксессуары{% endblock %}
+{% block title %}PhoneStore — Phones and accessories{% endblock %}
 
 {% block content %}
 <section class="hero">
     <div class="hero-text">
-        <span class="badge">Новые модели</span>
-        <h1>Лучшие телефоны для вашего образа жизни</h1>
-        <p>Мощные устройства, стильные аксессуары и быстрые доставки по всей стране.</p>
+        <span class="badge">New arrivals</span>
+        <h1>Technology that fits your life.</h1>
+        <p>Discover powerful phones, useful accessories, and a simple shopping experience.</p>
         <div class="hero-actions">
-            <a class="btn btn-primary" href="{% url 'catalog' %}">Смотреть каталог</a>
-            <a class="btn btn-secondary" href="{% url 'cart' %}">Корзина</a>
+            <a class="btn btn-primary" href="{% url 'catalog' %}">Explore the shop</a>
+            <a class="btn btn-secondary" href="{% url 'cart' %}">View cart</a>
         </div>
     </div>
+    <div class="hero-orb" aria-hidden="true">✦</div>
 </section>
 
 <section class="section">
     <div class="section-head">
-        <h2>Популярные товары</h2>
-        <a href="{% url 'catalog' %}">Все товары</a>
+        <div>
+            <span class="eyebrow">Curated for you</span>
+            <h2>Featured products</h2>
+        </div>
+        <a href="{% url 'catalog' %}">View all products <span aria-hidden="true">→</span></a>
     </div>
-
     <div class="product-grid">
         {% for product in products %}
             <article class="product-card">
-                <a href="{% url 'product_detail' product.pk %}">
-                    <img src="{{ product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ product.name }}">
+                <a href="{% url 'product_detail' product.pk %}" class="product-image-link">
+                    <img src="{{ product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ product.brand }} {{ product.name }}">
                 </a>
                 <div class="product-body">
                     <span class="category-tag">{{ product.get_category_display }}</span>
                     <h3>{{ product.brand }} {{ product.name }}</h3>
-                    <p>{{ product.price }} ₽</p>
-                    <div class="card-actions">
-                        <a class="btn btn-primary small" href="{% url 'product_detail' product.pk %}">Подробнее</a>
-                    </div>
+                    <p class="price-line">{{ product.price|floatformat:2 }} <span>USD</span></p>
+                    <a class="btn btn-primary small" href="{% url 'product_detail' product.pk %}">View details</a>
                 </div>
             </article>
         {% empty %}
-            <p>Товаров пока нет.</p>
+            <div class="empty-box"><p>No featured products yet.</p><a class="btn btn-primary" href="{% url 'catalog' %}">Browse the shop</a></div>
         {% endfor %}
     </div>
 </section>

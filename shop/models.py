@@ -3,24 +3,20 @@ from django.db import models
 
 
 class Product(models.Model):
-    CATEGORY_CHOICES = [
-        ('phone', 'Телефон'),
-        ('accessory', 'Аксессуар'),
-    ]
-
-    category = models.CharField('Категория', max_length=20, choices=CATEGORY_CHOICES, default='phone')
-    brand = models.CharField('Бренд', max_length=100)
-    name = models.CharField('Название', max_length=200)
-    description = models.TextField('Описание')
-    price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
-    image_url = models.URLField('Ссылка на изображение', max_length=500, blank=True)
-    stock = models.PositiveIntegerField('На складе', default=1)
-    featured = models.BooleanField('Показать на главной', default=False)
-    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    CATEGORY_CHOICES = [('phone', 'Phone'), ('accessory', 'Accessory')]
+    category = models.CharField('Category', max_length=20, choices=CATEGORY_CHOICES, default='phone')
+    brand = models.CharField('Brand', max_length=100)
+    name = models.CharField('Name', max_length=200)
+    description = models.TextField('Description')
+    price = models.DecimalField('Price', max_digits=10, decimal_places=2)
+    image_url = models.URLField('Image URL', max_length=500, blank=True)
+    stock = models.PositiveIntegerField('In stock', default=1)
+    featured = models.BooleanField('Featured on home page', default=False)
+    created_at = models.DateTimeField('Created', auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
         ordering = ['-created_at']
 
     def __str__(self):
@@ -28,46 +24,41 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Ожидает'),
-        ('processed', 'В обработке'),
-        ('completed', 'Завершён'),
-    ]
-
-    full_name = models.CharField('Имя', max_length=200)
-    phone = models.CharField('Телефон', max_length=30)
+    STATUS_CHOICES = [('pending', 'Pending'), ('processed', 'Processing'), ('completed', 'Completed')]
+    full_name = models.CharField('Full name', max_length=200)
+    phone = models.CharField('Phone', max_length=30)
     email = models.EmailField('Email', blank=True, null=True)
-    address = models.TextField('Адрес доставки')
-    comment = models.TextField('Комментарий', blank=True, default='')
-    created_at = models.DateTimeField('Дата заказа', auto_now_add=True)
-    status = models.CharField('Статус', max_length=20, choices=STATUS_CHOICES, default='pending')
+    address = models.TextField('Delivery address')
+    comment = models.TextField('Order notes', blank=True, default='')
+    created_at = models.DateTimeField('Order date', auto_now_add=True)
+    status = models.CharField('Status', max_length=20, choices=STATUS_CHOICES, default='pending')
 
     @property
     def total(self):
         return sum(item.total for item in self.items.all())
 
     class Meta:
-        verbose_name = 'Заказ'
-        verbose_name_plural = 'Заказы'
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
         ordering = ['-created_at']
 
     def __str__(self):
-        return f'Заказ #{self.pk} - {self.full_name}'
+        return f'Order #{self.pk} - {self.full_name}'
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    quantity = models.PositiveIntegerField('Количество', default=1)
-    price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField('Quantity', default=1)
+    price = models.DecimalField('Price', max_digits=10, decimal_places=2)
 
     @property
     def total(self):
         return self.price * self.quantity
 
     class Meta:
-        verbose_name = 'Позиция заказа'
-        verbose_name_plural = 'Позиции заказов'
+        verbose_name = 'Order item'
+        verbose_name_plural = 'Order items'
 
     def __str__(self):
         return f'{self.product.name} x {self.quantity}'

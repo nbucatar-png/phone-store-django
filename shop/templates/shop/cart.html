@@ -1,38 +1,26 @@
 {% extends 'shop/base.html' %}
 
-{% block title %}Корзина{% endblock %}
+{% block title %}Your cart{% endblock %}
 
 {% block content %}
 <section class="section">
-    <div class="section-head">
-        <h2>Корзина</h2>
-    </div>
-
+    <div class="section-head"><div><span class="eyebrow">Almost there</span><h1>Your cart</h1></div><a href="{% url 'catalog' %}">Continue shopping <span aria-hidden="true">→</span></a></div>
     {% if cart_items %}
         <div class="cart-list">
             {% for item in cart_items %}
                 <div class="cart-item">
-                    <img src="{{ item.product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ item.product.name }}">
-                    <div class="cart-info">
-                        <h3>{{ item.product.brand }} {{ item.product.name }}</h3>
-                        <p>{{ item.product.price }} ₽ × {{ item.quantity }}</p>
-                    </div>
-                    <div class="cart-total">
-                        <strong>{{ item.item_total }} ₽</strong>
-                    </div>
+                    <img src="{{ item.product.image_url|default:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80' }}" alt="{{ item.product.brand }} {{ item.product.name }}">
+                    <div class="cart-info"><h3>{{ item.product.brand }} {{ item.product.name }}</h3><p>{{ item.product.price|floatformat:2 }} USD each</p></div>
+                    <form class="cart-edit" method="post" action="{% url 'update_cart' item.product.pk %}">
+                        {% csrf_token %}<label class="sr-only" for="quantity-{{ item.product.pk }}">Quantity</label><input id="quantity-{{ item.product.pk }}" type="number" name="quantity" min="0" max="{{ item.product.stock }}" value="{{ item.quantity }}"><button class="icon-button" type="submit" title="Update quantity">↻</button>
+                    </form>
+                    <div class="cart-total"><strong>{{ item.item_total|floatformat:2 }} USD</strong><a class="remove-link" href="{% url 'remove_from_cart' item.product.pk %}">Remove</a></div>
                 </div>
             {% endfor %}
         </div>
-
-        <div class="cart-summary">
-            <p>Итого: <strong>{{ total }} ₽</strong></p>
-            <a class="btn btn-primary" href="{% url 'checkout' %}">Оформить заказ</a>
-        </div>
+        <div class="cart-summary"><p>Total <strong>{{ total|floatformat:2 }} USD</strong></p><a class="btn btn-primary" href="{% url 'checkout' %}">Checkout securely</a></div>
     {% else %}
-        <div class="empty-box">
-            <p>Ваша корзина пуста.</p>
-            <a class="btn btn-primary" href="{% url 'catalog' %}">Перейти в каталог</a>
-        </div>
+        <div class="empty-box"><div class="empty-icon">🛒</div><h2>Your cart is empty</h2><p>Find something you love and add it to your cart.</p><a class="btn btn-primary" href="{% url 'catalog' %}">Start shopping</a></div>
     {% endif %}
 </section>
 {% endblock %}

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern phones and accessories from PhoneStore">
     <title>{% block title %}PhoneStore{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,17 +14,22 @@
 <body>
     <header class="topbar">
         <div class="container nav-wrap">
-            <a href="{% url 'home' %}" class="logo">PhoneStore</a>
-            <nav class="nav">
-                <a href="{% url 'home' %}">Главная</a>
-                <a href="{% url 'catalog' %}">Каталог</a>
-                <a href="{% url 'cart' %}">Корзина</a>
+            <a href="{% url 'home' %}" class="logo">Phone<span>Store</span></a>
+            <nav class="nav" aria-label="Main navigation">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'catalog' %}">Shop</a>
+                <a href="{% url 'cart' %}" class="nav-cart">Cart</a>
             </nav>
         </div>
     </header>
-
     <main class="container">
         {% block content %}{% endblock %}
     </main>
+    <footer class="site-footer">
+        <div class="container footer-wrap">
+            <strong>PhoneStore</strong>
+            <span>Smart technology for everyday life.</span>
+        </div>
+    </footer>
 </body>
 </html>
